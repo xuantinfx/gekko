@@ -20,42 +20,42 @@ var subscriptions = [
     handler: 'processMarketStart'
   },
   {
-    emitter: 'tradingAdvisor',
+    emitter: ['tradingAdvisor', 'multipleTradingAdvisor'],
     event: 'stratWarmupCompleted',
     handler: 'processStratWarmupCompleted'
   },
   {
-    emitter: 'tradingAdvisor',
+    emitter: ['tradingAdvisor', 'multipleTradingAdvisor'],
     event: 'advice',
     handler: 'processAdvice'
   },
   {
-    emitter: 'tradingAdvisor',
+    emitter: ['tradingAdvisor', 'multipleTradingAdvisor'],
     event: 'stratCandle',
     handler: 'processStratCandle'
   },
   {
-    emitter: 'tradingAdvisor',
+    emitter: ['tradingAdvisor', 'multipleTradingAdvisor'],
     event: 'stratUpdate',
     handler: 'processStratUpdate'
   },
   {
-    emitter: 'tradingAdvisor',
+    emitter: ['tradingAdvisor', 'multipleTradingAdvisor'],
     event: 'stratNotification',
     handler: 'processStratNotification'
   },
   {
-    emitter: ['trader', 'paperTrader'],
+    emitter: ['trader', 'paperTrader', 'multiPaperTrader'],
     event: 'tradeInitiated',
     handler: 'processTradeInitiated'
   },
   {
-    emitter: ['trader', 'paperTrader'],
+    emitter: ['trader', 'paperTrader', 'multiPaperTrader'],
     event: 'tradeAborted',
     handler: 'processTradeAborted'
   },
   {
-    emitter: ['trader', 'paperTrader'],
+    emitter: ['trader', 'paperTrader', 'multiPaperTrader'],
     event: 'tradeCompleted',
     handler: 'processTradeCompleted'
   },
@@ -70,42 +70,42 @@ var subscriptions = [
     handler: 'processTradeErrored'
   },
   {
-    emitter: ['trader', 'paperTrader'],
+    emitter: ['trader', 'paperTrader', 'multiPaperTrader'],
     event: 'portfolioChange',
     handler: 'processPortfolioChange'
   },
   {
-    emitter: ['trader', 'paperTrader'],
+    emitter: ['trader', 'paperTrader', 'multiPaperTrader'],
     event: 'triggerCreated',
     handler: 'processTriggerCreated'
   },
   {
-    emitter: ['trader', 'paperTrader'],
+    emitter: ['trader', 'paperTrader', 'multiPaperTrader'],
     event: 'triggerAborted',
     handler: 'processTriggerAborted'
   },
   {
-    emitter: ['trader', 'paperTrader'],
+    emitter: ['trader', 'paperTrader', 'multiPaperTrader'],
     event: 'triggerFired',
     handler: 'processTriggerFired'
   },
   {
-    emitter: ['trader', 'paperTrader'],
+    emitter: ['trader', 'paperTrader', 'multiPaperTrader'],
     event: 'portfolioValueChange',
     handler: 'processPortfolioValueChange'
   },
   {
-    emitter: 'performanceAnalyzer',
+    emitter: ['performanceAnalyzer', 'multiPerformanceAnalyzer'],
     event: 'performanceReport',
     handler: 'processPerformanceReport'
   },
   {
-    emitter: 'performanceAnalyzer',
+    emitter: ['performanceAnalyzer', 'multiPerformanceAnalyzer'],
     event: 'roundtripUpdate',
     handler: 'processRoundtripUpdate'
   },
   {
-    emitter: 'performanceAnalyzer',
+    emitter: ['performanceAnalyzer', 'multiPerformanceAnalyzer'],
     event: 'roundtrip',
     handler: 'processRoundtrip'
   },

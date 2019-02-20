@@ -45,6 +45,15 @@ var plugins = [
     path: config => 'tradingAdvisor/tradingAdvisor.js',
   },
   {
+    name: 'Multiple Trading Advisor',
+    description: 'Multiple Calculate trading advice',
+    slug: 'multipleTradingAdvisor',
+    async: true,
+    modes: ['realtime', 'backtest'],
+    emits: true,
+    path: config => 'multipleTradingAdvisor/multipleTradingAdvisor.js',
+  },
+  {
     name: 'IRC bot',
     description: 'IRC module lets you communicate with Gekko on IRC.',
     slug: 'ircbot',
@@ -141,6 +150,15 @@ var plugins = [
     path: config => 'paperTrader/paperTrader.js',
   },
   {
+    name: 'Multi Paper Trader',
+    description: 'Multi Paper trader that simulates fake trades.',
+    slug: 'multiPaperTrader',
+    async: false,
+    modes: ['realtime', 'backtest'],
+    emits: true,
+    path: config => 'multiPaperTrader/multiPaperTrader.js',
+  },
+  {
     name: 'Performance Analyzer',
     description: 'Analyzes performances of trades',
     slug: 'performanceAnalyzer',
@@ -148,6 +166,15 @@ var plugins = [
     modes: ['realtime', 'backtest'],
     emits: true,
     path: config => 'performanceAnalyzer/performanceAnalyzer.js',
+  },
+  {
+    name: 'Multi Performance Analyzer',
+    description: 'Multi Analyzes performances of trades',
+    slug: 'multiPerformanceAnalyzer',
+    async: false,
+    modes: ['realtime', 'backtest'],
+    emits: true,
+    path: config => 'multiPerformanceAnalyzer/multiPerformanceAnalyzer.js',
   },
   {
     name: 'Redis beacon',
