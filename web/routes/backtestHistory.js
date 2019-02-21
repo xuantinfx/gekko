@@ -23,16 +23,17 @@ module.exports = function*() {
   if (backtestName) {
     if (_.indexOf(backtestHistory, backtestName) >= 0) {
       try {
-        console.log('readFile')
+        console.log('readFile');
         this.body = yield fs.readFile(
           gekkoRoot + 'backtestHistory/' + backtestName + '.json'
         );
       } catch (err) {
-        console.err(err);
-        this.body = {};
+        this.status = 404;
+        this.body = 'Error while getting backtest result ' + backtestName;
       }
     } else {
-      this.body = {};
+      this.status = 404;
+      this.body = 'Cannot find backtest result ' + backtestName;
     }
     return;
   }
