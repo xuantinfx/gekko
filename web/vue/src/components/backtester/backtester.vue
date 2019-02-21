@@ -2,6 +2,21 @@
   div
     h2.contain Backtest
     .hr
+    h3.contain History
+      table
+        tr 
+          th Index
+          th Strategy
+          th Date
+          th Time
+          th Details
+        tr(v-for='i in 10') 
+          td {{i}}
+          td MACD
+          td 2019-02-20
+          td 10-23-45
+          td 
+            a(href='https://www.google.com/', target='_blank') Link
     config-builder(v-on:config='check')
     div(v-if='backtestable')
       .txt--center
@@ -15,7 +30,7 @@
 <script>
 import configBuilder from './backtestConfigBuilder.vue'
 import result from './result/result.vue'
-import { post } from '../../tools/ajax'
+import { get, post } from '../../tools/ajax'
 import spinner from '../global/blockSpinner.vue'
 
 export default {
@@ -25,7 +40,16 @@ export default {
       backtestState: 'idle',
       backtestResult: false,
       config: false,
+      backtestHistory: []
     }
+  },
+  mounted: function () {
+    get('backtestHistory', (err, response) => {
+      if (err) console.log(err);
+      else {
+        this.backtestHistory = response;
+      }
+    })
   },
   methods: {
     check: function(config) {
