@@ -120,15 +120,16 @@ BacktestResultExporter.prototype.finalize = function(done) {
 
 BacktestResultExporter.prototype.writeToDisk = function(backtest, next) {
   const now = moment().format('YYYY-MM-DD_HH-mm-ss');
-  const filename = `backtest-${config.tradingAdvisor.method}-${now}.json`;
+  const filename = `backtest_${config.tradingAdvisor.method}_${now}.json`;
+  const fileDir = util.dirs().gekko + '/backtestHistory/'
   fs.writeFile(
-    util.dirs().gekko + filename,
+    fileDir + filename,
     JSON.stringify(backtest),
     err => {
       if(err) {
         log.error('unable to write backtest result', err);
       } else {
-        log.info('written backtest to: ', util.dirs().gekko + filename);
+        log.info('written backtest to: ', fileDir + filename);
       }
 
       next();

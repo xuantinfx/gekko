@@ -29,6 +29,7 @@
     "koa-static": "^2.0.0",
     "lodash": "2.x",
     "moment": "^2.20.1",
+    "nodemon": "^1.18.10",
     "opn": "^4.0.2",
     "promisify-node": "^0.5.0",
     "prompt-lite": "0.1.1",
