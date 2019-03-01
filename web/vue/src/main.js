@@ -1,23 +1,25 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from 'vue';
+import App from './App.vue';
 
-import VueRouter from 'vue-router'
+import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
-import store from './store'
+import store from './store';
 
-import backtester from './components/backtester/backtester.vue'
-import home from './components/layout/home.vue'
+import backtester from './components/backtester/backtester.vue';
+import home from './components/layout/home.vue';
 
-import data from './components/data/data.vue'
-import importer from './components/data/import/importer.vue'
-import singleImport from './components/data/import/single.vue'
-import config from './components/config/config.vue'
+import backtestHistoryDetail from './components/backtester/backtestHistoryDetail/backtestHistoryDetail.vue';
 
-import gekkoList from './components/gekko/list.vue'
-import newGekko from './components/gekko/new.vue'
-import singleGekko from './components/gekko/singleGekko.vue'
-import { connect as connectWS } from './components/global/ws'
+import data from './components/data/data.vue';
+import importer from './components/data/import/importer.vue';
+import singleImport from './components/data/import/single.vue';
+import config from './components/config/config.vue';
+
+import gekkoList from './components/gekko/list.vue';
+import newGekko from './components/gekko/new.vue';
+import singleGekko from './components/gekko/singleGekko.vue';
+import { connect as connectWS } from './components/global/ws';
 
 const router = new VueRouter({
   mode: 'hash',
@@ -26,6 +28,7 @@ const router = new VueRouter({
     { path: '/', redirect: '/home' },
     { path: '/home', component: home },
     { path: '/backtest', component: backtester },
+    { path: '/backtestHistory/:name', component: backtestHistoryDetail },
     { path: '/config', component: config },
     { path: '/data', component: data },
     { path: '/data/importer', component: importer },
@@ -33,7 +36,7 @@ const router = new VueRouter({
     { path: '/live-gekkos', component: gekkoList },
     { path: '/live-gekkos/new', component: newGekko },
     { path: '/live-gekkos/:id', component: singleGekko },
-  ]
+  ],
 });
 
 // setup some stuff
@@ -43,5 +46,5 @@ new Vue({
   router,
   store,
   el: '#app',
-  render: h => h(App)
-})
+  render: h => h(App),
+});

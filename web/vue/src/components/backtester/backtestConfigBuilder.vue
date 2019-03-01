@@ -69,7 +69,7 @@ export default {
           },
           backtestResultExporter: {
             enabled: true,
-            writeToDisk: false,
+            writeToDisk: true,
             data: {
               stratUpdates: false,
               roundtrips: true,

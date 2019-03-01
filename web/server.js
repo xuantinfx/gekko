@@ -82,12 +82,13 @@ const apiKeys = require(ROUTE('apiKeys'));
 router.get('/api/info', require(ROUTE('info')));
 router.get('/api/strategies', require(ROUTE('strategies')));
 router.get('/api/configPart/:part', require(ROUTE('configPart')));
-router.get('/api/apiKeys', apiKeys.get);
+router.get('/api/apiKeys', require(ROUTE('backtest')));
 
 const listWraper = require(ROUTE('list'));
 router.get('/api/imports', listWraper('imports'));
 router.get('/api/gekkos', listWraper('gekkos'));
 router.get('/api/exchanges', require(ROUTE('exchanges')));
+router.get('/api/backtestHistory/:name?', require(ROUTE('backtestHistory')))
 
 router.post('/api/addApiKey', apiKeys.add);
 router.post('/api/removeApiKey', apiKeys.remove);
