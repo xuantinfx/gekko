@@ -281,6 +281,42 @@ config.backtestResultExporter = {
   }
 }
 
+config.myBacktestResultExporter = {
+  enabled: true,
+  writeToDisk: true,
+  data: {
+    stratUpdates: true,
+    portfolioValues: true,
+    stratCandles: true,
+    roundtrips: true,
+    trades: true
+  },
+  fileNamePrefix: "Export-",
+  dataOut: {
+   info: {
+    "backtest.market.exchange": "Exchange",
+    "backtest.market.currency": "Currency",
+    "backtest.market.asset": "Asset",
+    "candleSize": "Candle Size"
+   }, 
+   table: {
+    rawData: {
+      "backtest.tradingAdvisor.method": "Name",
+      "performanceReport.startPrice": "Begin Price",
+      "endPrice": "End Price",
+      "performanceReport.startBalance": "Begin Balance",
+      "performanceReport.balance": "End Balance",
+    },
+    recipe: {
+      "Start Time": `moment(get(this, "dates.start","")).format('YYYY-MM-DD HH:mm:ss')`,
+      "End time": `moment(get(this, "dates.end","")).format('YYYY-MM-DD HH:mm:ss')`,
+      "market": "`${((this.endPrice - this.performanceReport.startPrice)/this.performanceReport.startPrice)*100}%`",
+      "profit": "`${((this.performanceReport.balance - this.performanceReport.startBalance)/this.performanceReport.startBalance)*100}%`",
+    }
+   }
+  }
+}
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //                       CONFIGURING ADAPTER
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
