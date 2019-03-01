@@ -223,6 +223,13 @@ var plugins = [
     modes: ['backtest']
   },
   {
+    name: 'My Backtest result export',
+    description: 'Custom Exports the results of a gekko backtest',
+    slug: 'myBacktestResultExporter',
+    async: false,
+    modes: ['backtest']
+  },
+  {
     name: 'Child to parent',
     description: 'Relays events from the child to the parent process',
     slug: 'childToParent',
