@@ -316,6 +316,9 @@ Base.prototype.finish = function(done) {
   // Because the strategy might be async we need
   // to be sure we only stop after all candles are
   // processed.
+  if(this.finished) {
+    this.finished();
+  }
   if(!this.asyncTick) {
     this.end();
     return done();
