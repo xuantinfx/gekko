@@ -25,21 +25,59 @@ method.update = function(candle) {
   this.candles.push({...candle, macd: macdVal, rsi: rsiVal});
 }
 
+// method.finished = function() {
+//   let strWrite = '';
+//   // write header
+//   for(let key in this.candles[this.candles.length - 1]) {
+//     strWrite += key + ','
+//   }
+//   strWrite += '\n';
+//   // write data
+//   for(let i = 0; i < this.candles.length; i++) {
+//     for(let key in this.candles[i]) {
+//       strWrite += this.candles[i][key] + ','
+//     }
+//     strWrite += '\n';
+//   }
+//   fs.writeFileSync(this.settings.fileName, strWrite);
+// }
+
 method.finished = function() {
-  let strWrite = '';
-  // write header
-  for(let key in this.candles[this.candles.length - 1]) {
-    strWrite += key + ','
-  }
-  strWrite += '\n';
-  // write data
-  for(let i = 0; i < this.candles.length; i++) {
-    for(let key in this.candles[i]) {
-      strWrite += this.candles[i][key] + ','
+  const writeCandle2Csv = (candles, fileName) => {
+    let strWrite = '';
+    // write header
+    for(let key in candles[0]) {
+      strWrite += key + ','
     }
     strWrite += '\n';
+    // write data
+    for(let i = 0; i < candles.length; i++) {
+      log.write(candles[i]);
+      for(let key in candles[i]) {
+        if(candles[i][key] === 0 && key !== 'action') {
+          // remove zero
+          if(i === 0) {
+            candles[i][key] = 0.01;
+          } else {
+            candles[i][key] = candles[i - 1][key];
+          }
+        }
+        strWrite += candles[i][key] + ','
+      }
+      strWrite += '\n';
+    }
+    fs.writeFileSync(fileName, strWrite);
   }
-  fs.writeFileSync(this.settings.fileName, strWrite);
+
+  let sell = 0, buy = 1;
+  for(let i = 0; i < this.candles.length - 1; i++) {
+    if(this.candles[i].close >= this.candles[i+1].close) {
+      this.candles[i].action = sell;
+    } else {
+      this.candles[i].action = buy;
+    }
+  }
+  writeCandle2Csv(this.candles, this.settings.fileName);
 }
 
 // for debugging purposes log the last
