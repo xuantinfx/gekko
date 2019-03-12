@@ -69,14 +69,14 @@ method.finished = function() {
     fs.writeFileSync(fileName, strWrite);
   }
 
-  let sell = 0, buy = 1;
-  for(let i = 0; i < this.candles.length - 1; i++) {
-    if(this.candles[i].close >= this.candles[i+1].close) {
-      this.candles[i].action = sell;
-    } else {
-      this.candles[i].action = buy;
-    }
-  }
+  // let sell = 0, buy = 1;
+  // for(let i = 0; i < this.candles.length - 1; i++) {
+  //   if(this.candles[i].close >= this.candles[i+1].close) {
+  //     this.candles[i].action = sell;
+  //   } else {
+  //     this.candles[i].action = buy;
+  //   }
+  // }
   writeCandle2Csv(this.candles, this.settings.fileName);
 }
 
