@@ -175,10 +175,10 @@ MyBacktestResultReporter.prototype.writeToDisk = function(backtest, next) {
       }
       strData += '\n';
       strData = mergeData(strData);
-      fs.writeFile(filePath, strData);
+      fs.writeFileSync(filePath, strData);
     } else {
       strData = mergeData(data.toString());
-      fs.writeFile(filePath, strData);
+      fs.writeFileSync(filePath, strData);
     }
   })
 }
