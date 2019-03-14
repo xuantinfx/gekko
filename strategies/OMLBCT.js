@@ -13,7 +13,7 @@ method.buy = function(amountDollar, price) {
     this.balance = this.balance - amountDollar;
     this.asset = this.asset + amountDollar/price;
   } else {
-    log.info(`Not enought money to buy, balance = ${this.balance}, amount dollar = ${amountDollar}`);
+    log.info(`Not enough money to buy, balance = ${this.balance}, amount dollar = ${amountDollar}`);
   }
 }
 
@@ -23,7 +23,7 @@ method.sell = function(amountAsset, price) {
     this.asset = this.asset - amountAsset;
     this.balance = this.balance + amountAsset*price;
   } else {
-    log.info(`Not enought asset to sell, asset = ${this.asset}, amount asset = ${amountAsset}`);
+    log.info(`Not enough asset to sell, asset = ${this.asset}, amount asset = ${amountAsset}`);
   }
 }
 
@@ -67,7 +67,7 @@ method.check = function(candle) {
       curTrade.isTrading = false;
     }
 
-    // Profit gearther than takeProfit
+    // Profit greater than takeProfit
     if(pecentProfit >= this.takeProfit) {
       sell();
     }
