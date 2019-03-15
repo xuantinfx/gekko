@@ -68,7 +68,7 @@ method.check = function (candle) {
   if (!this.startClose) {
     this.startClose = candle.close;
   }
-  let advice = Math.floor((100*Math.random()) % 2);
+  let advice = Math.floor((100 * Math.random()) % 2);
   // axios.get('http://localhost:5000/rf_advice', {
   //   params: {
   //     open: candle.open,
@@ -79,66 +79,66 @@ method.check = function (candle) {
   //     trades: candle.trades,
   //   }
   // }).then((result) => {
-    // buy
-    if (advice === 1) {
-      if (this.buy(this.amountForOneTrade, candle.close)) {
-        this.managerTrades.push({
-          close: candle.close,
+  // buy
+  if (advice === 1) {
+    if (this.buy(this.amountForOneTrade, candle.close)) {
+      this.managerTrades.push({
+        close: candle.close,
+        asset: this.amountForOneTrade / candle.close,
+        wait: 0,
+        isTrading: true,
+        id: this.id
+      })
+      if (this.settings.backtest) {
+        this.historyTrades.push({
           asset: this.amountForOneTrade / candle.close,
-          wait: 0,
-          isTrading: true,
-          id: this.id
+          candleBuy: candle,
+          id: this.id++
         })
-        if (this.settings.backtest) {
-          this.historyTrades.push({
-            asset: this.amountForOneTrade / candle.close,
-            candleBuy: candle,
-            id: this.id++
-          })
+      }
+    }
+  }
+
+  // sell
+  for (let i = 0; i < this.managerTrades.length; i++) {
+    let curTrade = this.managerTrades[i];
+    // Tăng biến đợi của trade lên 1
+    curTrade.wait++;
+    let pecentProfit = 100 * (candle.close - curTrade.close) / curTrade.close;
+
+    sell = () => {
+      this.sell(curTrade.asset, candle.close);
+      curTrade.isTrading = false;
+      if (this.settings.backtest) {
+        for (let j = 0; j < this.historyTrades.length; j++) {
+          if (this.historyTrades[j].id === curTrade.id) {
+            this.historyTrades[j].candleSell = candle;
+          }
         }
       }
     }
 
-    // sell
-    for (let i = 0; i < this.managerTrades.length; i++) {
-      let curTrade = this.managerTrades[i];
-      // Tăng biến đợi của trade lên 1
-      curTrade.wait++;
-      let pecentProfit = 100 * (candle.close - curTrade.close) / curTrade.close;
-
-      sell = () => {
-        this.sell(curTrade.asset, candle.close);
-        curTrade.isTrading = false;
-        if (this.settings.backtest) {
-          for(let j = 0; j < this.historyTrades.length; j++) {
-            if(this.historyTrades[j].id === curTrade.id) {
-              this.historyTrades[j].candleSell = candle;
-            }
-          }
-        }
-      }
-
-      // Profit greater than takeProfit
-      if (pecentProfit >= this.takeProfit) {
-        sell();
-      } else
+    // Profit greater than takeProfit
+    if (pecentProfit >= this.takeProfit) {
+      sell();
+    } else
 
       // Profit less than stopLoss
       if (pecentProfit <= this.stopLoss) {
         sell();
       } else
 
-      // Vượt quá giới hạn trade
-      if (curTrade.wait >= this.stopTrade) {
-        sell();
-      }
-    }
-    // Clear trading === false
-    this.managerTrades = this.managerTrades.filter(trade => {
-      return trade.isTrading === true;
-    })
+        // Vượt quá giới hạn trade
+        if (curTrade.wait >= this.stopTrade) {
+          sell();
+        }
+  }
+  // Clear trading === false
+  this.managerTrades = this.managerTrades.filter(trade => {
+    return trade.isTrading === true;
+  })
 
-    this.finalClose = candle.close;
+  this.finalClose = candle.close;
   // })
 }
 
@@ -146,16 +146,16 @@ const caclDistance2Dates = (date1, date2) => {
   let i = 0;
   let diff = date2 - date1;
 
-  return diff/3600 + 'h';
+  return diff / 3600 + 'h';
 }
 
 method.finished = function () {
   // Sell all Asset
   this.sell(this.asset, this.finalClose);
   // Report
-  for(let i = 0; i < this.historyTrades.length; i++) {
+  for (let i = 0; i < this.historyTrades.length; i++) {
     let curTrade = this.historyTrades[i];
-    if(curTrade.candleSell) {
+    if (curTrade.candleSell) {
       log.write(`Hold: ${caclDistance2Dates(curTrade.candleBuy.start.unix(), curTrade.candleSell.start.unix())} \t\t buy: ${curTrade.candleBuy.close} \t\t sell: ${curTrade.candleSell.close} \t\t profit: ${100* (curTrade.candleSell.close - curTrade.candleBuy.close)/curTrade.candleBuy.close} %`)
     }
   }
@@ -164,6 +164,18 @@ method.finished = function () {
   log.write(`End balance: \t\t ${this.balance}`);
   log.write(`Profit ($): \t\t ${this.balance - this.settings.startBalance} $`);
   log.write(`Profit (%): \t\t ${100*(this.balance - this.settings.startBalance)/this.settings.startBalance} %`);
+  log.write(`Trade make profit up: \t ${_.filter(this.historyTrades, curTrade => {
+    if (!curTrade.candleSell) {
+      return false;
+    }
+    return (curTrade.candleSell.close - curTrade.candleBuy.close) > 0;
+  }).length}`);
+  log.write(`Trade make profit down:  ${
+    _.filter(this.historyTrades, curTrade => {
+      if (!curTrade.candleSell) return false;
+      return (curTrade.candleSell.close - curTrade.candleBuy.close) < 0;
+    }).length
+  }`);
   log.write(`Market: \t\t ${100 * (this.finalClose - this.startClose) / this.startClose} %`);
   log.write(`Start Price: \t\t ${this.startClose} $`);
   log.write(`End Price: \t\t ${this.finalClose} $`);
