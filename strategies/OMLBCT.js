@@ -65,6 +65,9 @@ method.init = function () {
 }
 
 method.check = function (candle) {
+  if (!this.startClose) {
+    this.startClose = candle.close;
+  }
   let advice = Math.floor((100*Math.random()) % 2);
   // axios.get('http://localhost:5000/rf_advice', {
   //   params: {
@@ -156,10 +159,15 @@ method.finished = function () {
       log.write(`Hold: ${caclDistance2Dates(curTrade.candleBuy.start.unix(), curTrade.candleSell.start.unix())} \t\t buy: ${curTrade.candleBuy.close} \t\t sell: ${curTrade.candleSell.close} \t\t profit: ${100* (curTrade.candleSell.close - curTrade.candleBuy.close)/curTrade.candleBuy.close} %`)
     }
   }
+  log.write(`\n`);
   log.write(`Start Balance: \t\t ${this.settings.startBalance}`);
   log.write(`End balance: \t\t ${this.balance}`);
   log.write(`Profit ($): \t\t ${this.balance - this.settings.startBalance} $`);
   log.write(`Profit (%): \t\t ${100*(this.balance - this.settings.startBalance)/this.settings.startBalance} %`);
+  log.write(`Market: \t\t ${100 * (this.finalClose - this.startClose) / this.startClose} %`);
+  log.write(`Start Price: \t\t ${this.startClose} $`);
+  log.write(`End Price: \t\t ${this.finalClose} $`);
+  log.write(`\n`);
 }
 
 module.exports = method;
