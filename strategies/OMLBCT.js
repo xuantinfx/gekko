@@ -1,7 +1,7 @@
 // helpers
 var _ = require('lodash');
 var log = require('../core/log');
-const axios = require('axios');
+// const axios = require('axios');
 const moment = require('moment');
 
 // let's create our own method
@@ -62,13 +62,15 @@ method.init = function () {
   this.managerTrades = [];
 
   this.id = 0;
+
+  this.advice = require('../BTC_USDT_1h_OMLBCT_backtest.json');
 }
 
 method.check = function (candle) {
   if (!this.startClose) {
     this.startClose = candle.close;
   }
-  let advice = Math.floor((100 * Math.random()) % 2);
+
   // axios.get('http://localhost:5000/rf_advice', {
   //   params: {
   //     open: candle.open,
@@ -80,7 +82,9 @@ method.check = function (candle) {
   //   }
   // }).then((result) => {
   // buy
-  if (advice === 1) {
+  let advice = this.advice[new Date(candle.start).getTime()] || 0;
+
+  if (advice == 1) {
     if (this.buy(this.amountForOneTrade, candle.close)) {
       this.managerTrades.push({
         close: candle.close,
@@ -139,6 +143,7 @@ method.check = function (candle) {
   })
 
   this.finalClose = candle.close;
+  this.finalTime = candle.start;
   // })
 }
 
@@ -153,17 +158,25 @@ method.finished = function () {
   // Sell all Asset
   this.sell(this.asset, this.finalClose);
   // Report
+  let totalProfit = 0;
   for (let i = 0; i < this.historyTrades.length; i++) {
     let curTrade = this.historyTrades[i];
-    if (curTrade.candleSell) {
-      log.write(`Hold: ${caclDistance2Dates(curTrade.candleBuy.start.unix(), curTrade.candleSell.start.unix())} \t\t buy: ${curTrade.candleBuy.close} \t\t sell: ${curTrade.candleSell.close} \t\t profit: ${100* (curTrade.candleSell.close - curTrade.candleBuy.close)/curTrade.candleBuy.close} %`)
+    if (!curTrade.candleSell) {
+      curTrade.candleSell = {
+        start: this.finalTime,
+        close: this.finalClose
+      }
     }
+
+    log.write(`${curTrade.candleBuy.start.format('DD-MM-YYYY hh-mm-ss')} \t Hold: ${caclDistance2Dates(curTrade.candleBuy.start.unix(), curTrade.candleSell.start.unix())} \t buy: ${curTrade.candleBuy.close} \t sell: ${curTrade.candleSell.close} \t profit: ${100* (curTrade.candleSell.close - curTrade.candleBuy.close)/curTrade.candleBuy.close} %`)
+    totalProfit += (100 * (curTrade.candleSell.close - curTrade.candleBuy.close) / curTrade.candleBuy.close);
   }
   log.write(`\n`);
   log.write(`Start Balance: \t\t ${this.settings.startBalance}`);
   log.write(`End balance: \t\t ${this.balance}`);
   log.write(`Profit ($): \t\t ${this.balance - this.settings.startBalance} $`);
   log.write(`Profit (%): \t\t ${100*(this.balance - this.settings.startBalance)/this.settings.startBalance} %`);
+  log.write(`Total Profit: \t\t ${totalProfit}`)
   log.write(`Trade make profit up: \t ${_.filter(this.historyTrades, curTrade => {
     if (!curTrade.candleSell) {
       return false;
