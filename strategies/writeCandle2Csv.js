@@ -9,25 +9,12 @@ var method = {};
 
 // prepare everything our method needs
 method.init = function () {
-  // add the indicator to the strategy
-  // define the indicators we need
-  this.addIndicator('rsi', 'RSI', this.settings);
-  this.addIndicator('macd', 'MACD', this.settings);
   this.candles = [];
 };
 
 // what happens on every new candle?
 method.update = function (candle) {
-  // nothing!
-  let rsi = this.indicators.rsi;
-  let macd = this.indicators.macd;
-  let rsiVal = rsi.result;
-  let macdVal = macd.result;
-  this.candles.push({
-    ...candle,
-    macd: macdVal,
-    rsi: rsiVal
-  });
+  this.candles.push(candle)
 };
 
 // method.finished = function() {
@@ -71,9 +58,10 @@ method.finished = function () {
   };
 
   //classify candle action
-  let STAY = 0,
+  const STAY = 0,
     BUY = 1;
   for (let i = 0; i < this.candles.length; i++) {
+    this.candles[i].start = new Date(this.candles[i].start).getTime();
     if (i >= this.candles.length - this.settings.horizon) // last h candles will be ignored
       this.candles[i].action = STAY;
     else {
@@ -109,7 +97,7 @@ method.finished = function () {
 
   let data = csvStringify(this.candles, {
     header: true,
-    columns: ['open', 'high', 'low', 'close', 'volume', 'trades', 'action']
+    columns: ['start', 'open', 'high', 'low', 'close', 'volume', 'trades', 'action']
   });
   fs.writeFileSync(this.settings.fileName, data);
 
