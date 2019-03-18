@@ -310,6 +310,8 @@ config.myBacktestResultExporter = {
     recipe: {
       "Start Time": `moment(get(this, "dates.start","")).format('YYYY-MM-DD HH:mm:ss')`,
       "End time": `moment(get(this, "dates.end","")).format('YYYY-MM-DD HH:mm:ss')`,
+      "Buy": `_.filter(this.trades, trade => trade.action == "buy").length`,
+      "Sell": `_.filter(this.trades, trade => trade.action == "sell").length`,
       "market": "`${((this.endPrice - this.performanceReport.startPrice)/this.performanceReport.startPrice)*100}%`",
       "profit": "`${((this.performanceReport.balance - this.performanceReport.startBalance)/this.performanceReport.startBalance)*100}%`",
     }

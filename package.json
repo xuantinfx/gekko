@@ -16,9 +16,11 @@
   "author": "Mike van Rossum <mike@mvr.me>",
   "dependencies": {
     "async": "2.1.2",
+    "axios": "^0.18.0",
     "bitfinex-api-node": "^1.2.1",
     "co-fs": "^1.2.0",
     "commander": "^2.13.0",
+    "csv": "^5.1.1",
     "gekko": "0.0.9",
     "humanize-duration": "^3.10.0",
     "koa": "^1.2.0",
